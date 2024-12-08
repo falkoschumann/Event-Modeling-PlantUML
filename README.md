@@ -1,7 +1,7 @@
 # Event Modeling for PlantUML
 
 Provides a library for [Event Modeling](https://eventmodeling.org) with
-[PlantUML](https://plantuml.com. The library contains the following:
+[PlantUML](https://plantuml.com). The library contains the following:
 
 Elements:
 
