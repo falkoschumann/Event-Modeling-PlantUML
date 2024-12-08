@@ -24,7 +24,9 @@ Relationships:
 
 ## Installation
 
-Add `!include ./Event-Modeling.iuml` to your PlantUML file.
+Add
+`!include https://raw.githubusercontent.com/falkoschumann/Event-Modeling-PlantUML/main/Event-Modeling.puml`
+to your PlantUML file.
 
 ## Usage
 
@@ -56,9 +58,61 @@ Rel_Down(addAppointment, appointmentAdded)
 @enduml
 ```
 
+Source:
+
+```
+@startuml
+!include ./Event-Modeling.puml
+
+Role(role1, "Role 1") {
+  UI(ui, "UI")
+}
+
+Role(role2, "Role 2") {
+  UI(postAppointment, "POST /appointment")
+}
+
+Command(addAppointment, "Add appointment")
+
+Aggregate(appointment, "Appointment") {
+  Event(appointmentAdded, "Appointment added")
+}
+
+Rel_Down(ui, addAppointment)
+Rel_Down(postAppointment, addAppointment)
+Rel_Down(addAppointment, appointmentAdded)
+@enduml
+```
+
 ### View Pattern
 
 ```plantuml
+@startuml
+!include ./Event-Modeling.puml
+
+Role(role1, "Role 1") {
+  UI(ui, "UI")
+}
+
+Role(role2, "Role 2") {
+  UI(getAppointment, "GET /appointment")
+}
+
+Query(calender, "Calender")
+
+Aggregate(appointment, "Appointment") {
+  Event(appointmentAdded, "Appointment added")
+}
+
+Rel_Up(appointmentAdded, calender)
+Rel_Up(calender, ui)
+Rel_Up(calender, getAppointment)
+@enduml
+```
+
+Source:
+
+```
 @startuml
 !include ./Event-Modeling.puml
 
@@ -110,9 +164,65 @@ Rel_Down(addWeatherForecast, weatherPredictedForAppointment)
 @enduml
 ```
 
+Source:
+
+```
+@startuml
+!include ./Event-Modeling.puml
+
+Processor(weatherProcessor, "Weather Processor")
+
+Query(appointmentsWithoutWeatherForecast, "Appointments without weather forecast")
+Command(addWeatherForecast, "Add weather forecast")
+
+Lay_Right(appointmentsWithoutWeatherForecast, addWeatherForecast)
+
+Aggregate(appointment, "Appointment") {
+  Event(appointmentAdded, "Appointment added")
+}
+
+Aggregate(weather, "Weather") {
+  Event(weatherPredictedForAppointment, "Weather predicted for appointment")
+}
+
+Rel_Up(appointmentAdded, appointmentsWithoutWeatherForecast)
+Rel_Up(appointmentsWithoutWeatherForecast, weatherProcessor)
+Rel_Down(weatherProcessor, addWeatherForecast)
+Rel_Down(addWeatherForecast, weatherPredictedForAppointment)
+@enduml
+```
+
 ### Translation Pattern
 
 ```plantuml
+@startuml
+!include ./Event-Modeling.puml
+
+Processor(translatorProcessor, "Translator Processor")
+
+Query(changedPredictions, "Changed predictions")
+Command(translateChangedWeather, "Translate changed weather")
+
+Lay_Right(changedPredictions, translateChangedWeather)
+
+Aggregate(weather, "Weather") {
+  Event(updatedWeatherPrediction, "Updated weather prediction")
+}
+
+Aggregate(someExternalWeatherApi, "Some external weather API") {
+  Event(weatherForecastChanged, "Add weather forecast")
+}
+
+Rel_Up(weatherForecastChanged, changedPredictions)
+Rel_Up(changedPredictions, translatorProcessor)
+Rel_Down(translatorProcessor, translateChangedWeather)
+Rel_Down(translateChangedWeather, updatedWeatherPrediction)
+@enduml
+```
+
+Source:
+
+```
 @startuml
 !include ./Event-Modeling.puml
 
