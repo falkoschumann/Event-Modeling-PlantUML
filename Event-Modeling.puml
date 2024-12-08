@@ -1,0 +1,141 @@
+@startuml
+
+' Event Modeling
+' https://eventmodeling.org
+' Elements: UI, Processor, Command, Query, Event
+' Containers: Role, Aggregate
+' Relationships: Rel_D, Rel_U, Lay_R
+' Implementation based on https://github.com/plantuml/plantuml-stdlib
+
+hide stereotype
+
+!function $elementTagSkinparams($element, $tagStereo, $bgColor, $fontColor, $borderColor)
+  !$elementSkin = "skinparam " + $element + "<<" + $tagStereo + ">> {" + %newline()
+  !$elementSkin = $elementSkin + "  BackgroundColor " + $bgColor + %newline()
+  !$elementSkin = $elementSkin + "  FontColor " + $fontColor + %newline()
+  !$elementSkin = $elementSkin + "  BorderColor " + $borderColor + %newline()
+  !$elementSkin = $elementSkin + "}"+ %newline()
+  !return $elementSkin
+!endprocedure
+
+!unquoted procedure $defineSkinparams($tagStereo, $bgColor, $fontColor, $borderColor)
+$elementTagSkinparams("rectangle", $tagStereo, $bgColor, $fontColor, $borderColor)
+!endprocedure
+
+!unquoted procedure UpdateElementStyle($elementName, $bgColor, $fontColor, $borderColor)
+$defineSkinparams($elementName, $bgColor, $fontColor, $borderColor)
+!endprocedure
+
+' Element base layout
+' ##################################
+
+!function $getElementLine($umlShape, $elementType, $alias, $label)
+  !$line = $umlShape + " " + %chr(34) + $label + %chr(34) + " <<" + $elementType + ">> " + " as " + $alias
+  !return $line
+!endfunction
+
+' Relationship
+' ##################################
+
+!unquoted procedure Rel_D($from, $to)
+$from -d->> $to
+!endprocedure
+!unquoted procedure Rel_Down($from, $to)
+$from -d->> $to
+!endprocedure
+
+!unquoted procedure Rel_U($from, $to)
+$from -u->> $to
+!endprocedure
+!unquoted procedure Rel_Up($from, $to)
+$from -u->> $to
+!endprocedure
+
+' Layout Helpers
+' ##################################
+
+!unquoted procedure Lay_D($from, $to)
+$from .d[hidden]. $to
+!endprocedure
+!unquoted procedure Lay_Down($from, $to)
+$from .d[hidden]. $to
+!endprocedure
+
+!unquoted procedure Lay_R($from, $to)
+$from .r[hidden]. $to
+!endprocedure
+!unquoted procedure Lay_Right($from, $to)
+$from .r[hidden]. $to
+!endprocedure
+
+' Colors
+' ##################################
+
+!$UI_FONT_COLOR ?= "#000000"
+!$UI_BG_COLOR ?= "#FFFFFF"
+!$UI_BORDER_COLOR ?= "#000000"
+
+!$PROCESSOR_FONT_COLOR ?= "#000000"
+!$PROCESSOR_BG_COLOR ?= "#000000"
+!$PROCESSOR_BORDER_COLOR ?= "#000000"
+
+!$ROLE_FONT_COLOR ?= "#000000"
+!$ROLE_BG_COLOR ?= "#FFFFFF"
+!$ROLE_BORDER_COLOR ?= "#000000"
+
+!$COMMAND_FONT_COLOR ?= "#FFFFFF"
+!$COMMAND_BG_COLOR ?= "#2D9BF0"
+!$COMMAND_BORDER_COLOR ?= "#2D9BF0"
+
+!$QUERY_FONT_COLOR ?= "#FFFFFF"
+!$QUERY_BG_COLOR ?= "#8FD04E"
+!$QUERY_BORDER_COLOR ?= "#8FD04E"
+
+!$EVENT_FONT_COLOR ?= "#000000"
+!$EVENT_BG_COLOR ?= "#FFA455"
+!$EVENT_BORDER_COLOR ?= "#FFA455"
+
+!$AGGREGATE_FONT_COLOR ?= "#000000"
+!$AGGREGATE_BG_COLOR ?= "#FFFDDA"
+!$AGGREGATE_BORDER_COLOR ?= "#FFA455"
+
+' Styling
+UpdateElementStyle("ui", $UI_BG_COLOR, $UI_FONT_COLOR, $UI_BORDER_COLOR)
+UpdateElementStyle("processor", $PROCESSOR_BG_COLOR, $PROCESSOR_FONT_COLOR, $PROCESSOR_BORDER_COLOR)
+UpdateElementStyle("command", $COMMAND_BG_COLOR, $COMMAND_FONT_COLOR, $COMMAND_BORDER_COLOR)
+UpdateElementStyle("query", $QUERY_BG_COLOR, $QUERY_FONT_COLOR, $QUERY_BORDER_COLOR)
+UpdateElementStyle("event", $EVENT_BG_COLOR, $EVENT_FONT_COLOR, $EVENT_BORDER_COLOR)
+$elementTagSkinparams("frame", "role", $ROLE_BG_COLOR, $ROLE_FONT_COLOR, $ROLE_BORDER_COLOR)
+$elementTagSkinparams("frame", "aggregate", $AGGREGATE_BG_COLOR, $AGGREGATE_FONT_COLOR, $AGGREGATE_BORDER_COLOR)
+
+' Elements
+' ##################################
+
+!unquoted procedure UI($alias, $label, $baseShape="rectangle")
+  $getElementLine($baseShape, "ui", $alias, $label)
+!endprocedure
+
+!unquoted procedure Processor($alias, $label, $baseShape="rectangle")
+  $getElementLine($baseShape, "ui", $alias, $label)
+!endprocedure
+
+!unquoted procedure Command($alias, $label, $baseShape="rectangle")
+  $getElementLine($baseShape, "command", $alias, $label)
+!endprocedure
+
+!unquoted procedure Query($alias, $label, $baseShape="rectangle")
+  $getElementLine($baseShape, "query", $alias, $label)
+!endprocedure
+
+!unquoted procedure Event($alias, $label, $baseShape="rectangle")
+  $getElementLine($baseShape, "event", $alias, $label)
+!endprocedure
+
+!unquoted procedure Role($alias, $label, $baseShape="frame")
+  $getElementLine($baseShape, "role", $alias, $label)
+!endprocedure
+
+!unquoted procedure Aggregate($alias, $label, $baseShape="frame")
+  $getElementLine($baseShape, "aggregate", $alias, $label)
+!endprocedure
+@enduml
